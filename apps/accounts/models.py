@@ -10,20 +10,22 @@ import uuid
 def slugify_two_fields(self):
     return f"{self.first_name}-{self.last_name}"
 
+AUTH_PROVIDERS = [
+        ('google', 'Google'),
+    ]
 
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     email = models.EmailField(_('Email Address'), unique=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    google_id = models.CharField(max_length=255, unique=True)
     avatar = models.URLField(null=True, blank=True)
     username = AutoSlugField(
         _("Username"), populate_from=slugify_two_fields, unique=True, always_update=True
     )
-    bio = models.CharField(max_length=200, null=True, blank=True)
+    auth_provider = models.CharField(max_length=20, choices=AUTH_PROVIDERS, default="google")
+    provider_user_id = models.CharField(max_length=255, null=True, blank=True)
     
-    # Optional flags
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
@@ -43,6 +45,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
 
+    @property
     def tokens(self):
         refresh = RefreshToken.for_user(self)
         return {
