@@ -24,11 +24,6 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     "adrf",
-]
-
-LOCAL_APPS = [
-    "apps.accounts",
-    "apps.common",
     "rest_framework",
     "rest_framework_simplejwt",
     "drf_spectacular",
@@ -36,6 +31,11 @@ LOCAL_APPS = [
     "rest_framework_simplejwt.token_blacklist",
 ]
 
+LOCAL_APPS = [
+    "apps.accounts",
+    "apps.common",
+    "apps.groups"
+]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
